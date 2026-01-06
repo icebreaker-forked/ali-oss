@@ -1,4 +1,4 @@
-import _toString from 'lodash/toString';
+import _toString from 'lodash/toString.js';
 
 export function encodeString(str: unknown) {
   const tempStr = _toString(str);

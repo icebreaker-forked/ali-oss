@@ -1,5 +1,5 @@
-const { checkValid } = require('./checkValid');
-const { isObject } = require('./isObject');
+import { checkValid } from './checkValid';
+import { isObject } from './isObject';
 
 const commonRules = [
   {

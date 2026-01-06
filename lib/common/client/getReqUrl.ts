@@ -1,18 +1,15 @@
-import copy from 'copy-to';
-import urlutil from 'url';
 import merge from 'merge-descriptors';
 import is from 'is-type-of';
 import { isIP } from '../utils/isIP';
 import { checkConfigValid } from '../utils/checkConfigValid';
 
 export function getReqUrl(this: any, params) {
-  const ep: any = {};
   const isCname = this.options.cname;
   checkConfigValid(this.options.endpoint, 'endpoint');
-  copy(this.options.endpoint, false).to(ep);
+  const endpointUrl = new URL((this.options.endpoint && this.options.endpoint.href) || String(this.options.endpoint));
 
-  if (params.bucket && !isCname && !isIP(ep.hostname) && !this.options.sldEnable) {
-    ep.host = `${params.bucket}.${ep.host}`;
+  if (params.bucket && !isCname && !isIP(endpointUrl.hostname) && !this.options.sldEnable) {
+    endpointUrl.host = `${params.bucket}.${endpointUrl.host}`;
   }
 
   let resourcePath = '/';
@@ -24,7 +21,7 @@ export function getReqUrl(this: any, params) {
     // Preserve '/' in result url
     resourcePath += this._escape(params.object).replace(/\+/g, '%2B');
   }
-  ep.pathname = resourcePath;
+  endpointUrl.pathname = resourcePath;
 
   const query = {};
   if (params.query) {
@@ -45,7 +42,16 @@ export function getReqUrl(this: any, params) {
     merge(query, subresAsQuery);
   }
 
-  ep.query = query;
+  const searchParams = new URLSearchParams();
+  Object.keys(query).forEach(key => {
+    const value = (query as any)[key];
+    if (value === null || value === undefined) {
+      searchParams.set(key, '');
+    } else {
+      searchParams.set(key, String(value));
+    }
+  });
+  endpointUrl.search = searchParams.toString();
 
-  return urlutil.format(ep);
+  return endpointUrl.toString();
 }

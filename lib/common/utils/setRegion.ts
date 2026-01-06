@@ -1,4 +1,3 @@
-import urlutil from 'url';
 import { checkConfigValid } from './checkConfigValid';
 
 export function setRegion(region: string, internal = false, secure = false) {
@@ -11,5 +10,5 @@ export function setRegion(region: string, internal = false, secure = false) {
     suffix = '.aliyuncs.com';
   }
 
-  return urlutil.parse(protocol + region + suffix);
+  return new URL(protocol + region + suffix);
 }

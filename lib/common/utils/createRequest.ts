@@ -1,17 +1,17 @@
-const crypto = require('crypto');
-const debug = require('debug')('ali-oss');
-const _isString = require('lodash/isString');
-const _isArray = require('lodash/isArray');
-const _isObject = require('lodash/isObject');
-const mime = require('mime');
-const dateFormat = require('dateformat');
-const copy = require('copy-to');
-const path = require('path');
-const { encoder } = require('./encoder');
-const { isIP } = require('./isIP');
-const { setRegion } = require('./setRegion');
-const { getReqUrl } = require('../client/getReqUrl');
-const { isDingTalk } = require('./isDingTalk');
+import createDebug from 'debug';
+import mime from 'mime';
+import dateFormat from 'dateformat';
+import copy from 'copy-to';
+import _isString from 'lodash/isString.js';
+import _isArray from 'lodash/isArray.js';
+import _isObject from 'lodash/isObject.js';
+import CryptoJS from 'crypto-js';
+import { encoder } from './encoder';
+import { isIP } from './isIP';
+import { setRegion } from './setRegion';
+import { getReqUrl } from '../client/getReqUrl';
+import { isDingTalk } from './isDingTalk';
+const debug = createDebug('ali-oss');
 
 interface Headers {
   [propName: string]: any;
@@ -21,6 +21,13 @@ interface Headers {
 
 interface ReqParams {
   [propName: string]: any;
+}
+
+function extname(filename: string) {
+  const base = String(filename || '');
+  const idx = base.lastIndexOf('.');
+  if (idx <= 0) return '';
+  return base.slice(idx);
 }
 
 function getHeader(headers: Headers, name: string) {
@@ -72,7 +79,7 @@ export function createRequest(this: any, params) {
     } else if (isDingTalk()) {
       headers['Content-Type'] = 'application/octet-stream';
     } else {
-      headers['Content-Type'] = mime.getType(params.mime || path.extname(params.object || ''));
+      headers['Content-Type'] = mime.getType(params.mime || extname(params.object || ''));
     }
   }
 
@@ -83,7 +90,9 @@ export function createRequest(this: any, params) {
   if (params.content) {
     if (!params.disabledMD5) {
       if (!params.headers || !params.headers['Content-MD5']) {
-        headers['Content-MD5'] = crypto.createHash('md5').update(Buffer.from(params.content, 'utf8')).digest('base64');
+        headers['Content-MD5'] = CryptoJS.MD5(CryptoJS.enc.Utf8.parse(String(params.content))).toString(
+          CryptoJS.enc.Base64
+        );
       } else {
         headers['Content-MD5'] = params.headers['Content-MD5'];
       }

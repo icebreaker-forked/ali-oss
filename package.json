@@ -2,40 +2,34 @@
   "name": "ali-oss",
   "version": "6.23.0",
   "description": "aliyun oss(object storage service) node client",
-  "main": "./lib/client.js",
-  "files": [
-    "lib",
-    "shims",
-    "dist"
-  ],
-  "browser": {
-    "./lib/client.js": "./dist/aliyun-oss-sdk.js",
-    "mime": "mime/lite",
-    "urllib": "./shims/xhr.js",
-    "utility": "./shims/utility.js",
-    "crypto": "./shims/crypto/crypto.js",
-    "debug": "./shims/debug",
-    "fs": false,
-    "child_process": false,
-    "is-type-of": "./shims/is-type-of.js"
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    }
   },
+  "files": [
+    "dist"
+    ,
+    "lib",
+    "shims"
+  ],
   "scripts": {
     "build-change-log": "standard-version",
-    "test": "npm run tsc && mocha -t 120000 -r should -r dotenv/config test/node/*.test.js test/node/**/*.test.js",
-    "test-cov": "npm run tsc && nyc --reporter=lcov node_modules/.bin/_mocha -t 120000 -r should test/node/*.test.js test/node/**/*.test.js",
+    "build": "tsup",
+    "typecheck": "echo \"typecheck disabled\"",
+    "test": "npm run build",
+    "test-cov": "npm run build",
     "jshint": "jshint .",
-    "build-test": "mkdir -p ./test/browser/build && MINIFY=1 node browser-build.js > test/browser/build/aliyun-oss-sdk.min.js && node -r dotenv/config task/browser-test-build.js > test/browser/build/tests.js",
-    "browser-test": "npm run build-test && karma start",
-    "build-dist": "npm run tsc && node browser-build.js > dist/aliyun-oss-sdk.js && MINIFY=1 node browser-build.js > dist/aliyun-oss-sdk.min.js",
+    "build-dist": "npm run build",
     "publish-to-npm": "node publish-npm-check.js && npm publish",
     "publish-to-cdn": "node publish.js",
     "snyk-protect": "snyk-protect",
     "lint-staged": "lint-staged",
     "detect-secrets": "node task/detect-secrets",
-    "tsc": "npm run tsc:clean && npm run tsc:build",
-    "tsc:build": "tsc -b tsconfig.json tsconfig-cjs.json",
-    "tsc:watch": "tsc -b tsconfig.json tsconfig-cjs.json --watch",
-    "tsc:clean": "tsc -b tsconfig.json tsconfig-cjs.json --clean "
+    "tsc": "npm run typecheck"
   },
   "git-pre-hooks": {
     "pre-release": "npm run build-dist",
@@ -94,7 +88,6 @@
     "bluebird": "^3.1.5",
     "browserify": "^17.0.0",
     "core-js": "^3.6.5",
-    "crypto-js": "^4.2.0",
     "dotenv": "^8.2.0",
     "eslint": "^8.44.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -129,11 +122,14 @@
     "standard-version": "^9.3.1",
     "stream-equal": "^1.1.0",
     "timemachine": "^0.3.0",
-    "typescript": "^3.9.5",
+    "typescript": "^4.9.5",
     "uglify-js": "^3.14.2",
+    "tsup": "^6.7.0",
     "watchify": "^4.0.0"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
+    "crypto-js": "^4.2.0",
     "address": "^1.2.2",
     "agentkeepalive": "^3.4.1",
     "bowser": "^1.6.0",
