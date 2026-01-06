@@ -35,8 +35,7 @@
     "tsc": "npm run tsc:clean && npm run tsc:build",
     "tsc:build": "tsc -b tsconfig.json tsconfig-cjs.json",
     "tsc:watch": "tsc -b tsconfig.json tsconfig-cjs.json --watch",
-    "tsc:clean": "tsc -b tsconfig.json tsconfig-cjs.json --clean ",
-    "prepare": "husky install"
+    "tsc:clean": "tsc -b tsconfig.json tsconfig-cjs.json --clean "
   },
   "git-pre-hooks": {
     "pre-release": "npm run build-dist",
