@@ -1,4 +1,3 @@
-import merge from 'merge-descriptors';
 import getBucketRequestPayment from './getBucketRequestPayment';
 import putBucketRequestPayment from './putBucketRequestPayment';
 import putBucketEncryption from './putBucketEncryption';
@@ -29,37 +28,41 @@ import * as extendBucketWormOps from './extendBucketWorm';
 import * as getBucketWormOps from './getBucketWorm';
 import * as initiateBucketWormOps from './initiateBucketWorm';
 import * as getBucketStatOps from './getBucketStat';
+import { applyOps } from '../utils/applyOps';
 
 const proto: any = {};
-export default proto;
+applyOps(
+  proto,
+  getBucketRequestPayment,
+  putBucketRequestPayment,
+  putBucketEncryption,
+  getBucketEncryption,
+  deleteBucketEncryption,
+  getBucketTags,
+  putBucketTags,
+  deleteBucketTags,
+  putBucket,
+  getBucketWebsite,
+  putBucketWebsite,
+  deleteBucketWebsite,
+  getBucketLifecycle,
+  putBucketLifecycle,
+  deleteBucketLifecycle,
+  getBucketPolicy,
+  putBucketPolicy,
+  deleteBucketPolicy,
+  getBucketVersioning,
+  putBucketVersioning,
+  getBucketInventoryOps,
+  deleteBucketInventoryOps,
+  listBucketInventoryOps,
+  putBucketInventoryOps,
+  abortBucketWormOps,
+  completeBucketWormOps,
+  extendBucketWormOps,
+  getBucketWormOps,
+  initiateBucketWormOps,
+  getBucketStatOps
+);
 
-merge(proto, getBucketRequestPayment);
-merge(proto, putBucketRequestPayment);
-merge(proto, putBucketEncryption);
-merge(proto, getBucketEncryption);
-merge(proto, deleteBucketEncryption);
-merge(proto, getBucketTags);
-merge(proto, putBucketTags);
-merge(proto, deleteBucketTags);
-merge(proto, putBucket);
-merge(proto, getBucketWebsite);
-merge(proto, putBucketWebsite);
-merge(proto, deleteBucketWebsite);
-merge(proto, getBucketLifecycle);
-merge(proto, putBucketLifecycle);
-merge(proto, deleteBucketLifecycle);
-merge(proto, getBucketPolicy);
-merge(proto, putBucketPolicy);
-merge(proto, deleteBucketPolicy);
-merge(proto, getBucketVersioning);
-merge(proto, putBucketVersioning);
-merge(proto, getBucketInventoryOps);
-merge(proto, deleteBucketInventoryOps);
-merge(proto, listBucketInventoryOps);
-merge(proto, putBucketInventoryOps);
-merge(proto, abortBucketWormOps);
-merge(proto, completeBucketWormOps);
-merge(proto, extendBucketWormOps);
-merge(proto, getBucketWormOps);
-merge(proto, initiateBucketWormOps);
-merge(proto, getBucketStatOps);
+export default proto;

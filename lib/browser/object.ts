@@ -1,13 +1,13 @@
 // const debug = require('debug')('ali-oss:object');
 import copy from 'copy-to';
 import mime from 'mime';
-import merge from 'merge-descriptors';
 import { encodeCallback } from '../common/callback';
 import { isBlob } from '../common/utils/isBlob';
 import { isFile } from '../common/utils/isFile';
 import { isBuffer } from '../common/utils/isBuffer';
 import { obj2xml } from '../common/utils/obj2xml';
 import { parseRestoreInfo } from '../common/utils/parseRestoreInfo';
+import { applyOps } from '../common/utils/applyOps';
 import copyObjectOps from '../common/object/copyObject';
 import getObjectTaggingOps from '../common/object/getObjectTagging';
 import putObjectTaggingOps from '../common/object/putObjectTagging';
@@ -33,7 +33,6 @@ import { signPostObjectPolicyV4 } from '../common/object/signPostObjectPolicyV4'
 // var assert = require('assert');
 
 const proto: any = {};
-export default proto;
 
 function extname(filename) {
   const base = String(filename || '');
@@ -174,27 +173,30 @@ proto.putStream = async function putStream(name, stream, options) {
   return ret;
 };
 
-merge(proto, copyObjectOps);
-merge(proto, getObjectTaggingOps);
-merge(proto, putObjectTaggingOps);
-merge(proto, deleteObjectTaggingOps);
-merge(proto, imageOps);
-merge(proto, getBucketVersionsOps);
-merge(proto, getACLOps);
-merge(proto, putACLOps);
-merge(proto, headOps);
-merge(proto, deleteOps);
-merge(proto, getOps);
-merge(proto, putSymlinkOps);
-merge(proto, getSymlinkOps);
-merge(proto, deleteMultiOps);
-merge(proto, getObjectMetaOps);
-merge(proto, getObjectUrlOps);
-merge(proto, generateObjectUrlOps);
-merge(proto, signatureUrlOps);
-merge(proto, asyncSignatureUrlOps);
-merge(proto, signatureUrlV4Ops);
-merge(proto, { signPostObjectPolicyV4 });
+applyOps(
+  proto,
+  copyObjectOps,
+  getObjectTaggingOps,
+  putObjectTaggingOps,
+  deleteObjectTaggingOps,
+  imageOps,
+  getBucketVersionsOps,
+  getACLOps,
+  putACLOps,
+  headOps,
+  deleteOps,
+  getOps,
+  putSymlinkOps,
+  getSymlinkOps,
+  deleteMultiOps,
+  getObjectMetaOps,
+  getObjectUrlOps,
+  generateObjectUrlOps,
+  signatureUrlOps,
+  asyncSignatureUrlOps,
+  signatureUrlV4Ops,
+  { signPostObjectPolicyV4 }
+);
 
 proto.putMeta = async function putMeta(name, meta, options) {
   const copyResult = await this.copy(name, name, {
@@ -402,3 +404,5 @@ proto._convertMetaToHeaders = function _convertMetaToHeaders(meta, headers) {
     headers[`x-oss-meta-${k}`] = meta[k];
   });
 };
+
+export default proto;

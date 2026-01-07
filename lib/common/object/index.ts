@@ -1,4 +1,3 @@
-import merge from 'merge-descriptors';
 import getSymlinkOps from './getSymlink';
 import putSymlinkOps from './putSymlink';
 import getObjectMetaOps from './getObjectMeta';
@@ -22,30 +21,34 @@ import signatureUrlOps from './signatureUrl';
 import asyncSignatureUrlOps from './asyncSignatureUrl';
 import signatureUrlV4Ops from './signatureUrlV4';
 import * as signPostObjectPolicyV4Ops from './signPostObjectPolicyV4';
+import { applyOps } from '../utils/applyOps';
 
 const proto: any = {};
-export default proto;
+applyOps(
+  proto,
+  getSymlinkOps,
+  putSymlinkOps,
+  getObjectMetaOps,
+  copyObjectOps,
+  calculatePostSignatureOps,
+  getObjectTaggingOps,
+  putObjectTaggingOps,
+  deleteObjectTaggingOps,
+  getBucketVersionsOps,
+  deleteMultiOps,
+  getACLOps,
+  putACLOps,
+  headOps,
+  deleteOps,
+  getOps,
+  postAsyncFetchOps,
+  getAsyncFetchOps,
+  generateObjectUrlOps,
+  getObjectUrlOps,
+  signatureUrlOps,
+  asyncSignatureUrlOps,
+  signatureUrlV4Ops,
+  signPostObjectPolicyV4Ops
+);
 
-merge(proto, getSymlinkOps);
-merge(proto, putSymlinkOps);
-merge(proto, getObjectMetaOps);
-merge(proto, copyObjectOps);
-merge(proto, calculatePostSignatureOps);
-merge(proto, getObjectTaggingOps);
-merge(proto, putObjectTaggingOps);
-merge(proto, deleteObjectTaggingOps);
-merge(proto, getBucketVersionsOps);
-merge(proto, deleteMultiOps);
-merge(proto, getACLOps);
-merge(proto, putACLOps);
-merge(proto, headOps);
-merge(proto, deleteOps);
-merge(proto, getOps);
-merge(proto, postAsyncFetchOps);
-merge(proto, getAsyncFetchOps);
-merge(proto, generateObjectUrlOps);
-merge(proto, getObjectUrlOps);
-merge(proto, signatureUrlOps);
-merge(proto, asyncSignatureUrlOps);
-merge(proto, signatureUrlV4Ops);
-merge(proto, signPostObjectPolicyV4Ops);
+export default proto;
